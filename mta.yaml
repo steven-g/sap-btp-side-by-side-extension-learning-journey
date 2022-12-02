@@ -50,6 +50,26 @@ modules:
       - name: risk-management-auth
 
 resources:
+  - name: risk-management-uaa
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: application
+      path: ./xs-security.json
+      config:
+        #xsappname: risk-management-${org}-${space}
+        xsappname: risk-management-${org}-${space}-1
+        tenant-mode: dedicated
+        role-collections:
+        - name: 'RiskManager-${space}'
+          description: Manage Risks
+          role-template-references:
+          - $XSAPPNAME.RiskManager
+        - name: 'RiskViewer-${space}'
+          description: View Risks
+          role-template-references:
+          - $XSAPPNAME.RiskViewer
+
   - name: risk-management-db
     type: com.sap.xs.hdi-container
     parameters:
@@ -64,3 +84,5 @@ resources:
       config:
         xsappname: risk-management-${org}-${space}
         tenant-mode: dedicated
+
+  
